@@ -1,0 +1,11 @@
+apiVersion: v1                                                                                           
+kind: Service
+metadata:                                                                                                
+  name: lmsia-abc-server-service
+spec:                                                                                                    
+  selector:                                                                                              
+    app: lmsia-abc-server
+  ports:                                                                                                 
+  - name: http
+    protocol: TCP                                                                                        
+    port: 8080         
