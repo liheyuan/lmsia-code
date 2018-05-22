@@ -9,3 +9,6 @@ spec:
   - name: http
     protocol: TCP                                                                                        
     port: 8080         
+  - name: rpc
+    protocol: TCP                                                                                        
+    port: 3000         

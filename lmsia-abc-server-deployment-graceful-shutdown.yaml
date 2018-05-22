@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lmsia-abc-server-deployment
+spec:
+  selector:
+    matchLabels:
+      app: lmsia-abc-server
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: lmsia-abc-server
+    spec:
+      containers:
+      - name: lmsia-abc-server-ct
+        image: coder4/lmsia-abc-server:latest
+        ports:
+        - containerPort: 8080
+        - containerPort: 3000
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 3
+
