@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: lmsia-abc-server-ct
-        image: coder4/lmsia-abc-server:latest
+        image: coder4/lmsia-abc-server:0.2
         ports:
         - containerPort: 8080
         - containerPort: 3000

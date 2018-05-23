@@ -22,5 +22,7 @@ docker build -t ${SERVER_NAME} .
 rm -rf ${PROJECT_NAME}
 
 # Push to dockerhub.io
-docker tag $SERVER_NAME coder4/$SERVER_NAME:latest
-docker push coder4/$SERVER_NAME:latest
+#docker tag $SERVER_NAME coder4/$SERVER_NAME:latest
+#docker push coder4/$SERVER_NAME:latest
+docker tag $SERVER_NAME coder4/$SERVER_NAME:0.2
+docker push coder4/$SERVER_NAME:0.2
