@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gerrit-deployment
+spec:
+  selector:
+    matchLabels:
+      app: gerrit
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: gerrit
+    spec:
+      restartPolicy: Always 
+      nodeSelector:
+        kubernetes.io/hostname: minikube 
+      containers:
+      - name: gerrit-ct
+        image: openfrontier/gerrit:2.15.1
+        ports:
+        - containerPort: 8080
+          hostPort: 80 
+        - containerPort: 29418 
+          hostPort: 29418
+        volumeMounts:
+        - mountPath: "/var/gerrit/review_site"
+          name: volume 
+        env:
+        - name: GITWEB_TYPE
+          value: gitiles
+        - name: AUTH_TYPE 
+          value: LDAP
+        - name: LDAP_SERVER 
+          value: ldap://192.168.99.100
+        - name: LDAP_ACCOUNTBASE 
+          value: "dc=coder4,dc=com"
+        - name: LDAP_ACCOUNTPATTERN
+          value: "(cn=${username})"
+        - name: LDAP_ACCOUNTSSHUSERNAME
+          value: "${cn}"
+        - name: LDAP_ACCOUNTFULLNAME
+          value: "${sn}"
+        - name: LDAP_USERNAME
+          value: "cn=guest,dc=coder4,dc=com"
+        - name: LDAP_PASSWORD
+          value: "guest123"
+        - name: WEBURL 
+          value: "http://192.168.99.100"
+      volumes:
+      - name: volume 
+        hostPath:
+          path: /data/gerrit/
