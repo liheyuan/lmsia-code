@@ -1,0 +1,51 @@
+version: 1
+
+# users org
+dn: ou=users,dc=coder4,dc=com
+objectClass: top
+objectClass: organizationalUnit
+ou: users
+
+# group org
+dn: ou=groups,dc=coder4,dc=com
+objectClass: top
+objectClass: organizationalUnit
+ou: groups
+
+# define users here
+dn: cn=lihy,ou=users,dc=coder4,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: lihy
+sn:: 5p2O6LWr5YWD
+mail: lihy@coder4.com
+userPassword: {SSHA}yG3DQj7iol10+fzWoeBAgoZ+D+h9uQre 
+
+dn: cn=zhangsan,ou=users,dc=coder4,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: zhangsan 
+sn:: 5byg5LiJ
+mail: zhangsan@coder4.com
+userPassword: {SSHA}yG3DQj7iol10+fzWoeBAgoZ+D+h9uQre
+
+# should also modify here if insert new user
+dn: cn=Users,ou=groups,dc=coder4,dc=com
+objectClass: top
+objectClass: groupOfUniqueNames
+cn: Users
+uniqueMember: cn=lihy,ou=users,dc=coder4,dc=com
+uniqueMember: cn=zhangsan,ou=users,dc=coder4,dc=com
+
+# define admin here
+dn: cn=Admin,ou=groups,dc=coder4,dc=com
+objectClass: top
+objectClass: groupOfUniqueNames
+cn: Admin
+uniqueMember: cn=lihy,ou=users,dc=coder4,dc=com
+
+

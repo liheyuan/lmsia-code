@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openldap-deployment
+spec:
+  selector:
+    matchLabels:
+      app: openldap
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: openldap
+    spec:
+      restartPolicy: Always 
+      nodeSelector:
+        kubernetes.io/hostname: minikube 
+      containers:
+      - name: openldap-ct
+        image: osixia/openldap:1.1.9 
+        ports:
+        - containerPort: 389
+          hostPort: 389 
+        - containerPort: 636
+          hostPort: 636 
+        volumeMounts:
+        - mountPath: "/etc/ldap/slapd.d"
+          name: volume 
+          subPath: conf
+        - mountPath: "/var/lib/ldap"
+          name: volume
+          subPath: data
+        env:
+        - name: LDAP_TLS 
+          value: "false"
+        - name: LDAP_DOMAIN 
+          value: "coder4.com"
+        - name: LDAP_ADMIN_PASSWORD 
+          value: "admin123"
+        - name: LDAP_READONLY_USER 
+          value: "true"
+        - name: LDAP_READONLY_USER_USERNAME
+          value: "guest"
+        - name: LDAP_READONLY_USER_PASSWORD 
+          value: "guest123"
+      volumes:
+      - name: volume 
+        hostPath:
+          path: /data/openldap/
