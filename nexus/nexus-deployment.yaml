@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nexus-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nexus
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nexus
+    spec:
+      restartPolicy: Always 
+      nodeSelector:
+        kubernetes.io/hostname: minikube 
+      containers:
+      - name: nexus-ct
+        image: sonatype/nexus:2.14.8
+        ports:
+        - containerPort: 8081
+          hostPort: 8081 
+        volumeMounts:
+        - mountPath: "/sonatype-work"
+          name: volume 
+      volumes:
+      - name: volume 
+        hostPath:
+          path: /data/nexus/
