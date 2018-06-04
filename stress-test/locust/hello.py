@@ -11,5 +11,5 @@ class TestSet(TaskSet):
 
 class WebsiteUser(HttpLocust):
     task_set = TestSet
-    min_wait = 0
-    max_wait = 0
+    min_wait = 1
+    max_wait = 1

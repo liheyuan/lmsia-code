@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lmsia-private-test
+spec:
+  containers:
+  - name: lmsia-private-test
+    image: 192.168.99.100:5000/alpine_test  
+  imagePullSecrets:
+  - name: regcred
+

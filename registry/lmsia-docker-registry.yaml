@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lmsia-docker-registry-deployment
+spec:
+  selector:
+    matchLabels:
+      app: lmsia-docker-registry
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: lmsia-docker-registry
+    spec:
+      restartPolicy: Always
+      nodeSelector:
+        kubernetes.io/hostname: minikube
+      containers:
+      - name: lmsia-docker-registry-ct
+        image: registry:2.6.2
+        ports:
+        - containerPort: 5000
+          hostPort: 5000 
+        volumeMounts:
+        - mountPath: "/auth"
+          name: volume
+          subPath: auth
+        - mountPath: "/certs"
+          name: volume
+          subPath: certs
+        - mountPath: "/var/lib/registry"
+          name: volume
+          subPath: registry
+        env:
+        - name: "REGISTRY_STORAGE_DELETE_ENABLED"
+          value: "true"
+      volumes:
+      - name: volume
+        hostPath:
+          path: /data/registry/
