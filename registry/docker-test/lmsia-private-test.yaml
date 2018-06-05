@@ -5,7 +5,7 @@ metadata:
 spec:
   containers:
   - name: lmsia-private-test
-    image: 192.168.99.100:5000/alpine_test  
+    image: 192.168.99.100:5000/alpine_test:test_1.0
   imagePullSecrets:
   - name: regcred
 
