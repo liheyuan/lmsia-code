@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-writer
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: mysql-writer
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-writer
+spec:
+  selector:
+    matchLabels:
+      app: mysql-writer
+  template:
+    metadata:
+      labels:
+        app: mysql-writer
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: minikube
+      restartPolicy: Always
+      hostname: mysql-writer
+      containers:
+      - name: mysql-writer-ct
+        image: coder4/mysql-replication:8.0
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - mountPath: "/var/lib/mysql"
+          name: volume
+        env:
+        - name: "MYSQL_ROOT_PASSWORD"
+          value: "root123"
+      volumes:
+      - name: volume
+        hostPath:
+          path: /data/mysql_writer/
