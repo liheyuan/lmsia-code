@@ -37,6 +37,7 @@ spec:
         env:
         - name: "MYSQL_ROOT_PASSWORD"
           value: "root123"
+        args: ["--server-id=1"]
       volumes:
       - name: volume
         hostPath:

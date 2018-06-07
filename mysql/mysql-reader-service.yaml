@@ -39,10 +39,7 @@ spec:
           value: "root123"
         - name: "MYSQL_MASTER_SERVER"
           value: "mysql-writer"
-        - name: "server_id"
-          value: "1"
-        - name: "read_only"
-          value: "1"
+        args: ["--read-only=1", "--server-id=2"]
       volumes:
       - name: volume
         hostPath:
