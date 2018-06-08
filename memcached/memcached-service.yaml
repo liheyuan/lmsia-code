@@ -1,31 +1,33 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: memcached2
+  name: memcached
 spec:
   ports:
   - port: 11211 
   selector:
-    app: memcached2 
+    app: memcached
   clusterIP: None
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet 
 metadata:
-  name: memcached2
+  name: memcached
 spec:
   selector:
     matchLabels:
-      app: memcached2
+      app: memcached
+  serviceName: "memcached"
+  replicas: 2
   template:
     metadata:
       labels:
-        app: memcached2
+        app: memcached
     spec:
       restartPolicy: Always
-      hostname: memcached2
+      hostname: memcached
       containers:
-      - name: memcached2-ct
+      - name: memcached-ct
         image: memcached:1.5-alpine
         ports:
         - containerPort: 11211 
