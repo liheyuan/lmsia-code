@@ -58,7 +58,7 @@ spec:
           initialDelaySeconds: 10
           timeoutSeconds: 5
         volumeMounts:
-        - mountPath: /var/lib/rabbitmq
+        - mountPath: /var/lib/rabbitmq/mnesia
           name: rabbitmq-pvc
         env:
           - name: MY_POD_IP
