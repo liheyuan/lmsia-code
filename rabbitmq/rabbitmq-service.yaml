@@ -57,6 +57,9 @@ spec:
             command: ["rabbitmqctl", "status"]
           initialDelaySeconds: 10
           timeoutSeconds: 5
+        volumeMounts:
+        - mountPath: /var/lib/rabbitmq
+          name: rabbitmq-volume
         env:
           - name: MY_POD_IP
             valueFrom:
@@ -76,3 +79,13 @@ spec:
             value: "true"
           - name: CLEANUP_WARN_ONLY
             value: "false"
+  volumeClaimTemplates:
+  - metadata:
+      name: rabbitmq-volume
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 8Gi
+      storageClassName: rbd
