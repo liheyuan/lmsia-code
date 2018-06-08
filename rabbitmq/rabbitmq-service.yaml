@@ -59,7 +59,7 @@ spec:
           timeoutSeconds: 5
         volumeMounts:
         - mountPath: /var/lib/rabbitmq
-          name: rabbitmq-volume
+          name: rabbitmq-pvc
         env:
           - name: MY_POD_IP
             valueFrom:
@@ -81,11 +81,11 @@ spec:
             value: "false"
   volumeClaimTemplates:
   - metadata:
-      name: rabbitmq-volume
+      name: rabbitmq-pvc
     spec:
+      storageClassName: standard
       accessModes:
         - ReadWriteOnce
       resources:
         requests:
-          storage: 8Gi
-      storageClassName: rbd
+          storage: 20Gi
