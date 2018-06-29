@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-lmsia-test1-master
+spec:
+  ports:
+  - port: 6379
+  selector:
+    app: redis-lmsia-test1-master
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-lmaia-test1-master-deployment
+spec:
+  selector:
+    matchLabels:
+      app: redis-lmsia-test1-master
+  template:
+    metadata:
+      labels:
+        app: redis-lmsia-test1-master
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: minikube
+      restartPolicy: Always
+      hostname: redis
+      containers:
+      - name: redis-sentinel-ct
+        image: coder4/redis-sentinel-k8s:4.0.10
+        ports:
+        - containerPort: 6379
+        env:
+        - name: "MASTER"
+          value: "true"
+        - name: "MASTER_NAME"
+          value: "lmsia_test1"
