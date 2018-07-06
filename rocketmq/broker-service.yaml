@@ -34,6 +34,8 @@ spec:
         - containerPort: 10909 
         - containerPort: 10911
         env:
+        - name: NAME_SERVER_LIST
+          value: "rocketmq-nameserver-0.rn:9876,rocketmq-nameserver-1.rn:9876" 
         - name: BROKER_SERVER
           value: "true"
         - name: BROKER_IDX
