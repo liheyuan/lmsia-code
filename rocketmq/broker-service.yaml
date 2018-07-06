@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rb 
+spec:
+  ports:
+  - port: 10909 
+  - port: 10911
+  selector:
+    app: rocketmq-brokerserver
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: StatefulSet 
+metadata:
+  name: rocketmq-brokerserver 
+spec:
+  selector:
+    matchLabels:
+      app: rocketmq-brokerserver
+  serviceName: "rb"
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: rocketmq-brokerserver 
+    spec:
+      restartPolicy: Always
+      hostname: rocketmq-brokerserver 
+      containers:
+      - name: rocketmq-brokerserver-ct
+        image: rocketmq:latest
+        ports:
+        - containerPort: 10909 
+        - containerPort: 10911
+        env:
+        - name: BROKER_SERVER
+          value: "true"
+        - name: BROKER_IDX
+          valueFrom:
+              fieldRef:
+                fieldPath: metadata.annotations['spec.pod.beta.kubernetes.io/statefulset-index']

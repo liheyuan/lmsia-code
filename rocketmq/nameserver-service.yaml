@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rn 
+spec:
+  ports:
+  - port: 9876
+  selector:
+    app: rocketmq-nameserver
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: StatefulSet 
+metadata:
+  name: rocketmq-nameserver 
+spec:
+  selector:
+    matchLabels:
+      app: rocketmq-nameserver
+  serviceName: "rn"
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: rocketmq-nameserver 
+    spec:
+      restartPolicy: Always
+      hostname: rocketmq-nameserver 
+      containers:
+      - name: rocketmq-nameserver-ct
+        image: coder4/rocketmq:4.2.0
+        ports:
+        - containerPort: 9876 
+        env:
+        - name: NAME_SERVER
+          value: "true"
