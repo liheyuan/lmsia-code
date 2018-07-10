@@ -28,7 +28,8 @@ spec:
       hostname: rocketmq-nameserver 
       containers:
       - name: rocketmq-nameserver-ct
-        image: coder4/rocketmq:4.2.0
+        imagePullPolicy: Never
+        image: rocketmq:latest
         ports:
         - containerPort: 9876 
         env:

@@ -4,8 +4,10 @@ metadata:
   name: rb 
 spec:
   ports:
-  - port: 10909 
-  - port: 10911
+  - name: p9
+    port: 10909 
+  - name: p11
+    port: 10911
   selector:
     app: rocketmq-brokerserver
   clusterIP: None
@@ -29,16 +31,16 @@ spec:
       hostname: rocketmq-brokerserver 
       containers:
       - name: rocketmq-brokerserver-ct
+        imagePullPolicy: Never
         image: rocketmq:latest
         ports:
         - containerPort: 10909 
         - containerPort: 10911
         env:
         - name: NAME_SERVER_LIST
-          value: "rocketmq-nameserver-0.rn:9876,rocketmq-nameserver-1.rn:9876" 
+          value: "rocketmq-nameserver-0.rn:9876;rocketmq-nameserver-1.rn:9876" 
         - name: BROKER_SERVER
           value: "true"
-        - name: BROKER_IDX
-          valueFrom:
-              fieldRef:
-                fieldPath: metadata.annotations['spec.pod.beta.kubernetes.io/statefulset-index']
+        - name: BROKER_CLUSTER_CONF
+          value: "2m-noslave"
+
