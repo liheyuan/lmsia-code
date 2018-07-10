@@ -29,7 +29,7 @@ spec:
       containers:
       - name: rocketmq-nameserver-ct
         imagePullPolicy: Never
-        image: coder4/rocketmq:4.2.0
+        image: rocketmq:latest
         ports:
         - containerPort: 9876 
         volumeMounts:
