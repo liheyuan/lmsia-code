@@ -32,7 +32,7 @@ spec:
       containers:
       - name: rocketmq-brokerserver-ct
         imagePullPolicy: Never
-        image: rocketmq:latest
+        image: coder4/rocketmq:4.2.0
         ports:
         - containerPort: 10909 
         - containerPort: 10911

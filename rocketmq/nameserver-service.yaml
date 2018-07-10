@@ -29,9 +29,26 @@ spec:
       containers:
       - name: rocketmq-nameserver-ct
         imagePullPolicy: Never
-        image: rocketmq:latest
+        image: coder4/rocketmq:4.2.0
         ports:
         - containerPort: 9876 
+        volumeMounts:
+        - mountPath: /opt/logs
+          subPath: logs
+          name: rocketmq-nameserver-pvc
+        - mountPath: /opt/store
+          subPath: store
+          name: rocketmq-nameserver-pvc
         env:
         - name: NAME_SERVER
           value: "true"
+  volumeClaimTemplates:
+  - metadata:
+      name: rocketmq-nameserver-pvc
+    spec:
+      storageClassName: standard
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 20Gi
