@@ -36,6 +36,9 @@ spec:
         ports:
         - containerPort: 10909 
         - containerPort: 10911
+        volumeMounts:
+        - mountPath: /opt/rocketmq_home
+          name: rocketmq-brokerserver-pvc
         env:
         - name: NAME_SERVER_LIST
           value: "rocketmq-nameserver-0.rn:9876;rocketmq-nameserver-1.rn:9876" 
@@ -43,4 +46,13 @@ spec:
           value: "true"
         - name: BROKER_CLUSTER_CONF
           value: "2m-noslave"
-
+  volumeClaimTemplates:
+  - metadata:
+      name: rocketmq-brokerserver-pvc
+    spec:
+      storageClassName: standard
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 20Gi

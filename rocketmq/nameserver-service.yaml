@@ -33,11 +33,7 @@ spec:
         ports:
         - containerPort: 9876 
         volumeMounts:
-        - mountPath: /opt/logs
-          subPath: logs
-          name: rocketmq-nameserver-pvc
-        - mountPath: /opt/store
-          subPath: store
+        - mountPath: /opt/rocketmq_home
           name: rocketmq-nameserver-pvc
         env:
         - name: NAME_SERVER
