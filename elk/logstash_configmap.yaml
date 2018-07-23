@@ -1,0 +1,23 @@
+apiVersion: v1
+data:
+  logstash.yml: |
+    http.host: "0.0.0.0"
+    xpack.monitoring.elasticsearch.url: http://elasticsearch:9200
+    input {
+      heartbeat {
+        interval => 5
+        message  => 'Hello from Logstash 💓'
+      }
+    }
+    
+    output {
+      elasticsearch {
+        hosts    => [ 'elasticsearch-0.es' ]
+        user     => 'elastic'
+        password => ''
+      }
+    }
+
+kind: ConfigMap
+metadata:
+  name: logstash-configmap
