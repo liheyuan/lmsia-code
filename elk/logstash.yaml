@@ -34,6 +34,10 @@ spec:
         env:
         - name: "ES_JAVA_OPTS"
           value: "-Xms384m -Xmx384m"
+        - name: "XPACK_MONITORING_ENABLED"
+          value: "false"
+        - name: "XPACK_MONITORING_ELASTICSEARCH_URL"
+          value: "http://elasticsearch-0.es:9200"
         volumeMounts:
         - name: logstash-configmap
           mountPath: /usr/share/logstash/pipeline/logstash.conf

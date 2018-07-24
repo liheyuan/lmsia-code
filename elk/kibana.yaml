@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kb
+spec:
+  selector:
+    app: kibana 
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: kibana 
+spec:
+  selector:
+    matchLabels:
+      app: kibana 
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kibana 
+    spec:
+      hostname: kibana
+      containers:
+      - name: kibana-ct
+        image: docker.elastic.co/kibana/kibana:6.3.1 
+        ports:
+        - containerPort: 5601
+          hostPort: 5601
+        env:
+        - name: "ES_JAVA_OPTS"
+          value: "-Xms384m -Xmx384m"
+        - name: "ELASTICSEARCH_URL"
+          value: "http://elasticsearch-0.es:9200"
+        - name: "XPACK_MONITORING_ENABLED"
+          value: "false"

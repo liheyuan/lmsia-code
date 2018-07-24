@@ -37,3 +37,16 @@ spec:
         env:
         - name: "ES_JAVA_OPTS"
           value: "-Xms384m -Xmx384m"
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/data 
+          name: elasticsearch-pvc
+  volumeClaimTemplates:
+  - metadata:
+      name: elasticsearch-pvc
+    spec:
+      storageClassName: standard
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 20Gi
