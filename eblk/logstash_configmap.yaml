@@ -1,11 +1,16 @@
 apiVersion: v1
 data:
   logstash.conf: |
-    http.host: "0.0.0.0"
+
     input {
-      heartbeat {
-        interval => 5
-        message  => 'Hello from Logstash 💓'
+      beats {
+        port => 5555
+      }
+    }
+
+    filter {
+      grok {
+        match => {"message" => "(?m)^(?<TIMESTAMP>%{YEAR}-%{MONTHNUM}-%{MONTHDAY} %{TIME}) \[%{LOGLEVEL:LEVEL}\] \[(?<THREAD>.*?)\] \[(?<LOGGER>.*?)\] \[tr=(?<TRACE_ID>.*?)\]\s+(?<MSG>.*)" }
       }
     }
     

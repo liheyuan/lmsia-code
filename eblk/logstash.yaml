@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ls
+spec:
+  ports:
+  - name: p
+    port: 5555
+  selector:
+    app: logstash
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: StatefulSet 
+metadata:
+  name: logstash
+spec:
+  selector:
+    matchLabels:
+      app: logstash
+  serviceName: "ls"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: logstash
+    spec:
+      hostname: logstash
+      containers:
+      - name: logstash-ct
+        image: docker.elastic.co/logstash/logstash:6.3.1 
+        ports:
+        - containerPort: 5555 
+        env:
+        - name: "ES_JAVA_OPTS"
+          value: "-Xms384m -Xmx384m"
+        - name: "XPACK_MONITORING_ENABLED"
+          value: "false"
+        - name: "XPACK_MONITORING_ELASTICSEARCH_URL"
+          value: "http://elasticsearch-0.es:9200"
+        volumeMounts:
+        - name: logstash-configmap
+          mountPath: /usr/share/logstash/pipeline/logstash.conf
+          subPath: logstash.conf
+      volumes:
+      - name: logstash-configmap
+        configMap:
+          name: logstash-configmap
