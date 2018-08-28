@@ -1,0 +1,50 @@
+FROM ubuntu:18.04
+
+# Basic
+RUN apt-get update
+RUN apt-get install -y software-properties-common 
+
+# Java
+ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
+RUN \
+  echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
+  add-apt-repository -y ppa:webupd8team/java && \
+  apt-get update && \
+  apt-get install -y oracle-java8-installer
+
+# SSH
+RUN apt-get install -y openssh-server \
+    && mkdir /var/run/sshd \
+    && sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
+
+# Unzip
+RUN apt-get install -y unzip
+
+# Gradle
+ENV GRADLE_HOME /opt/gradle
+ENV GRADLE_VERSION 4.10
+ARG GRADLE_DOWNLOAD_SHA256=248cfd92104ce12c5431ddb8309cf713fe58de8e330c63176543320022f59f18
+RUN set -o errexit -o nounset \
+	&& echo "Downloading Gradle" \
+	&& wget --no-verbose --output-document=gradle.zip "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" \
+	\
+	&& echo "Checking download hash" \
+	&& echo "${GRADLE_DOWNLOAD_SHA256} *gradle.zip" | sha256sum --check - \
+	\
+	&& echo "Installing Gradle" \
+	&& unzip gradle.zip \
+	&& rm gradle.zip \
+	&& mv "gradle-${GRADLE_VERSION}" "${GRADLE_HOME}/" \
+	&& ln --symbolic "${GRADLE_HOME}/bin/gradle" /usr/bin/gradle
+
+# Create User
+RUN useradd -m build 
+RUN echo "build:build123" | chpasswd
+
+# Clean
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/oracle-jdk8-installer
+
+EXPOSE 22
+
+CMD ["/usr/sbin/sshd", "-D"]
