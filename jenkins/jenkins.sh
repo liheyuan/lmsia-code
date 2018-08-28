@@ -13,6 +13,7 @@ docker run \
     -v $VOLUME:/var/jenkins_home \
     -p 9001:8080 \
     -p 50000:50000 \
+    --link slave:slave \
     --detach \
     --restart always \
     jenkins/jenkins:2.60.3-alpine
