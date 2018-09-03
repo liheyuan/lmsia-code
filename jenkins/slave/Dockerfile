@@ -1,10 +1,13 @@
 FROM ubuntu:18.04
 
-# apt-add-repostory zip unzip git
+# commons 
 RUN apt-get update
-RUN apt-get install -y apt-utils software-properties-common zip unzip git
+RUN apt-get install -y apt-utils apt-transport-https \
+    ca-certificates curl software-properties-common \
+    zip unzip git
 
 # SSH
+EXPOSE 22
 RUN apt-get install -y openssh-server \
     && mkdir /var/run/sshd \
     && sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
@@ -39,11 +42,6 @@ RUN useradd -m build
 RUN echo "build:build123" | chpasswd
 
 # Docker ce
-RUN apt-get install -y \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    software-properties-common
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 RUN add-apt-repository \
     "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
@@ -53,12 +51,12 @@ RUN apt-get install -y docker-ce
 RUN usermod -aG docker build
 
 # Clean
-RUN apt-get remove -y apt-utils software-properties-common && \
-    apt-get autoremove -y && \
+RUN apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/oracle-jdk8-installer
 
-EXPOSE 22
+# Custom Script
+COPY ms2docker.sh /home/build 
 
 # SSH Daemon
 CMD ["/usr/sbin/sshd", "-D"]
